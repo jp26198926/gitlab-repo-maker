@@ -4,11 +4,10 @@ const AppContext = createContext();
 
 const initialState = {
     api: "https://gitlab.com/api/v4",
-    token: "",
+    token: "glpat-eyU7YcBzJ1i7bNfUYWa9",
     groups: [],
     selectedGroup: {id:0},
-    subgroupParentName: "",
-    subgroupParentPath: "",
+    // selectedParentGroup: {id:0},
     subgroups: [],
     repositories: [],
     errorMessages: [],
@@ -32,10 +31,12 @@ const appReducer = (state, action) => {
         case "GROUP_LIST":
             return {...state, groups: action.payload}
         case "SET_SELECTED_GROUP":
-            const selected = state.groups.find(group => group.id == action.payload);            
-            return {...state, selectedGroup: selected}
+            return {...state, selectedGroup: action.payload}
         case "CLEAR_SELECTED_GROUP":
             return {...state, selectedGroup: {id: 0}}
+
+        
+        
         default:
             return state;
     }

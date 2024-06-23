@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContext';
 import TokenInput from './TokenInput';
 import ErrorMessage from './ErrorMessage';
 import SuccessMessage from './SuccessMessage';
-import GroupDropdown from './GroupDropdown';
+import Group from './Group';
 
 const steps = [
   {
@@ -13,15 +13,11 @@ const steps = [
   },
   {
     step_no: 2, 
-    component: GroupDropdown,
+    component: Group,
     descriptions: [
       "Select a group. (If not exist, you need to manually create it in the Gitlab)", 
       "If you don't want the have in a group, just unchecked 'Select a group'."
     ]
-  },
-  {
-    step_no: 3, 
-    descriptions: ["Enter Personal Access Token. Get/Create it from Gitlab Account"]
   },
   {
     step_no: 4, 
@@ -57,28 +53,7 @@ const Stepper = () => {
       const errorMsg = error.response?.data?.message || "Invalid Token";
       dispatch({type: "ADD_ERROR", payload: errorMsg })
     }
-  }
-
-  const getGroups = async () => {
-    try{
-      const response = await fetch(`${state.api}/groups?per_page=50000`, {    
-        headers: {
-          "Authorization" : `Bearer ${state.token.trim()}`
-        }
-      });
-
-      if (!response.ok) throw new Error("Unable to fetch groups");
-      
-      const data = await response.json();
-      const parentGroup = data.filter(group => !group.parent_id);
-      
-      dispatch({type: "GROUP_LIST", payload: parentGroup});
-
-    }catch(error){
-      const errorMsg = error.response?.data?.message || "Unable to fetch groups";
-      dispatch({type: "ADD_ERROR", payload: errorMsg })
-    }
-  }
+  }  
 
   const handleNext = async () => {
     if (currentStep < steps.length - 1) {
@@ -88,9 +63,11 @@ const Stepper = () => {
       //first Step
       if (currentStep === 0) { 
         const validToken = await checkToken();
-        await getGroups();
 
         if (validToken) setCurrentStep(currentStep + 1);
+
+      }else{
+        setCurrentStep(currentStep + 1);
       }      
     }
   };
@@ -138,7 +115,7 @@ const Stepper = () => {
       <ErrorMessage />
       <SuccessMessage />
 
-      {StepComponent && <StepComponent />}
+      {StepComponent && <StepComponent group={state.selectedGroup} />}
 
       <div className="flex justify-between">
         <button
