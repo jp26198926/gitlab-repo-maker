@@ -4,7 +4,7 @@ const AppContext = createContext();
 
 const initialState = {
     api: "https://gitlab.com/api/v4",
-    token: "glpat-eyU7YcBzJ1i7bNfUYWa9",
+    token: import.meta.env.VITE_ACCESS_TOKEN || "",
     groups: [],
     selectedGroup: {id:0},
     // selectedParentGroup: {id:0},
