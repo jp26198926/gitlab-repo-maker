@@ -4,6 +4,7 @@ import TokenInput from './TokenInput';
 import ErrorMessage from './ErrorMessage';
 import SuccessMessage from './SuccessMessage';
 import Group from './Group';
+import Subgroup from './SubGroup';
 
 const steps = [
   {
@@ -20,15 +21,16 @@ const steps = [
     ]
   },
   {
+    step_no: 3, 
+    component: Subgroup,
+    descriptions: ["Define the list of subgroups to be created, e.g student-name and path"]
+  },
+  {
     step_no: 4, 
     descriptions: ["Enter Personal Access Token. Get/Create it from Gitlab Account"]
   },
   {
     step_no: 5, 
-    descriptions: ["Enter Personal Access Token. Get/Create it from Gitlab Account"]
-  },
-  {
-    step_no: 6, 
     descriptions: ["Enter Personal Access Token. Get/Create it from Gitlab Account"]
   }
 ];
@@ -57,6 +59,7 @@ const Stepper = () => {
 
   const handleNext = async () => {
     if (currentStep < steps.length - 1) {
+      dispatch({type: 'SET_LOADING'});
       //clear messages e.g error or success msgs
       dispatch({type: "CLEAR_MESSAGES"});
       
@@ -94,7 +97,7 @@ const Stepper = () => {
                 justify-center w-10 h-10 
                 mx-auto rounded-full text-white 
                 ${
-                  index <= currentStep ? 'bg-purple-800' : 'bg-gray-300'
+                  index <= currentStep ? 'bg-indigo-800' : 'bg-gray-300'
                 }`
               }
             >
@@ -128,7 +131,7 @@ const Stepper = () => {
         <button
           onClick={handleNext}
           disabled={currentStep === steps.length - 1}
-          className="px-4 py-2 bg-purple-800 text-white rounded disabled:opacity-50"
+          className="px-4 py-2 bg-indigo-800 text-white rounded disabled:opacity-50"
         >
           Next
         </button>

@@ -52,7 +52,7 @@ function Group() {
                 <input
                     type="checkbox"
                     id="enableDropdown"
-                    className="checkbox accent-purple-800"
+                    className="checkbox accent-indigo-800"
                     checked={isChecked}
                     onChange={toggleCheckbox}
                 />
@@ -83,9 +83,9 @@ function Group() {
                 ))
             }
 
-            <hr  className="bg-purple-900  my-3"/>
+            <hr  className="bg-indigo-900  my-3"/>
 
-            <p className="font-bold text-purple-800">SELECTED</p>
+            <p className="font-bold text-indigo-800">SELECTED</p>
             <p>ID: {state.selectedGroup?.id}</p>
             <p>NAME: {state.selectedGroup?.name}</p>
             <p>PATH: {state.selectedGroup?.path}</p>

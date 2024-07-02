@@ -47,7 +47,7 @@ function GroupTree({ group }) {
                 </button>
                 <span
                     onClick={handleSelect} 
-                    className={`${state.selectedGroup.id == group.id && 'bg-purple-800 px-3 py-1 rounded text-white'}`}
+                    className={`${state.selectedGroup.id == group.id && 'bg-indigo-800 px-3 py-1 rounded text-white'}`}
                 >
                     {group?.name}
                 </span>

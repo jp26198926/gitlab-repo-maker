@@ -11,7 +11,8 @@ const initialState = {
     subgroups: [],
     repositories: [],
     errorMessages: [],
-    successMessages: []
+    successMessages: [],
+    loading: false,
 }
 
 const appReducer = (state, action) => {
@@ -26,7 +27,9 @@ const appReducer = (state, action) => {
             return {...state, errorMessages: [...state.errorMessages, action.payload]}
         case "ADD_SUCCESS":
             return {...state, successMessages: [...state.successMessages, action.payload]}
-        
+        case "SET_LOADING":
+            return {...state, loading: true}
+
         //GROUP
         case "GROUP_LIST":
             return {...state, groups: action.payload}
