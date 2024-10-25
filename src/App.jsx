@@ -11,7 +11,7 @@ const App = () => {
       <Helmet>
         <title>GBRM</title>
       </Helmet>  
-      {loading && <LoadingScreen />}
+      {<LoadingScreen />}
       <div className="p-8">
         <h1 className="flex justify-center text-5xl text-center mb-6 text-indigo-800">Gitlab Bulk Repository Maker</h1>
         <Stepper  />

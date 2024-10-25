@@ -5,6 +5,8 @@ import ErrorMessage from './ErrorMessage';
 import SuccessMessage from './SuccessMessage';
 import Group from './Group';
 import Subgroup from './SubGroup';
+import Project from './Project';
+import Summary from './Summary';
 
 const steps = [
   {
@@ -27,11 +29,13 @@ const steps = [
   },
   {
     step_no: 4, 
-    descriptions: ["Enter Personal Access Token. Get/Create it from Gitlab Account"]
+    component: Project,
+    descriptions: ["Define the list of projects or repositories to be created under each sub-group in step#3"]
   },
   {
-    step_no: 5, 
-    descriptions: ["Enter Personal Access Token. Get/Create it from Gitlab Account"]
+    step_no: 5,
+    component: Summary, 
+    descriptions: ["Summary"]
   }
 ];
 
@@ -39,7 +43,10 @@ const Stepper = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const {state, dispatch} = useContext(AppContext);
 
+  const StepComponent = steps[currentStep].component;
+
   const checkToken = async () => {
+    dispatch({type: 'SET_LOADING', payload: true});
     try{
       const response = await fetch(`${state.api}/user`, {
         headers: {
@@ -47,6 +54,7 @@ const Stepper = () => {
         }
       });
 
+      dispatch({type: 'SET_LOADING', payload: false});
       if (!response.ok) throw new Error("Invalid Token");
       
       return true;
@@ -54,19 +62,19 @@ const Stepper = () => {
     }catch(error){
       const errorMsg = error.response?.data?.message || "Invalid Token";
       dispatch({type: "ADD_ERROR", payload: errorMsg })
+      dispatch({type: 'SET_LOADING', payload: false});
     }
   }  
 
   const handleNext = async () => {
-    if (currentStep < steps.length - 1) {
-      dispatch({type: 'SET_LOADING'});
+    if (currentStep < steps.length - 1) {      
       //clear messages e.g error or success msgs
       dispatch({type: "CLEAR_MESSAGES"});
       
       //first Step
       if (currentStep === 0) { 
         const validToken = await checkToken();
-
+        
         if (validToken) setCurrentStep(currentStep + 1);
 
       }else{
@@ -84,7 +92,7 @@ const Stepper = () => {
     }
   };
 
-  const StepComponent = steps[currentStep].component;
+  
 
   return (
     <div className="w-full max-w-xl mx-auto p-4">
@@ -106,7 +114,7 @@ const Stepper = () => {
           </div>
         ))}
       </div>
-      <div className="text-left mb-4">
+      <div className="text-center mb-4">
         <h2 className="text-xl font-semibold">Step {steps[currentStep].step_no}</h2>
         {
           steps[currentStep].descriptions.map((msg, idx) => (
@@ -115,10 +123,14 @@ const Stepper = () => {
         }        
       </div>
 
+      <hr className="my-3"/>
+
       <ErrorMessage />
       <SuccessMessage />
 
       {StepComponent && <StepComponent group={state.selectedGroup} />}
+      
+      <hr className="my-3"/>
 
       <div className="flex justify-between">
         <button
